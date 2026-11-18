@@ -25,7 +25,7 @@
   function emptyState(lang = 'es', currency = 'USD') {
     return {
       v: 1, created: today(),
-      settings: { lang, theme: 'system', motion: 'system', currency, opening: true, tourDone: false, notify: false, remindDays: 2, pin: null, name: '' },
+      settings: { lang, theme: 'system', motion: 'system', currency, opening: true, autoUpdate: true, tourDone: false, notify: false, remindDays: 2, pin: null, name: '' },
       rates: {}, accounts: [], cats: [], tx: [], rec: [], goals: [], debts: [], people: [], shared: [], worth: [], lastRec: null,
     };
   }
@@ -338,7 +338,7 @@
     const arr = (a, max) => { if (!Array.isArray(a)) return []; if (a.length > max) throw Error('too-big'); return a; };
     const st = obj.settings || {};
     s.created = validDate(obj.created) ? obj.created : today();
-    s.settings = { ...s.settings, lang: ['es', 'en', 'pt', 'fr'].includes(st.lang) ? st.lang : 'es', theme: ['light', 'dark', 'system'].includes(st.theme) ? st.theme : 'system', motion: ['on', 'system', 'off'].includes(st.motion) ? st.motion : 'system', currency: /^[A-Z]{3}$/.test(st.currency) ? st.currency : 'USD', opening: st.opening !== false, tourDone: !!st.tourDone, notify: !!st.notify, remindDays: Math.max(0, Math.min(14, num(st.remindDays) | 0)), name: str(st.name, 60),
+    s.settings = { ...s.settings, lang: ['es', 'en', 'pt', 'fr'].includes(st.lang) ? st.lang : 'es', theme: ['light', 'dark', 'system'].includes(st.theme) ? st.theme : 'system', motion: ['on', 'system', 'off'].includes(st.motion) ? st.motion : 'system', currency: /^[A-Z]{3}$/.test(st.currency) ? st.currency : 'USD', opening: st.opening !== false, autoUpdate: st.autoUpdate !== false, tourDone: !!st.tourDone, notify: !!st.notify, remindDays: Math.max(0, Math.min(14, num(st.remindDays) | 0)), name: str(st.name, 60),
       pin: st.pin && typeof st.pin.salt === 'string' && typeof st.pin.hash === 'string' ? { salt: st.pin.salt.slice(0, 64), hash: st.pin.hash.slice(0, 128) } : null };
     for (const [k, v] of Object.entries(obj.rates || {})) if (/^[A-Z]{3}$/.test(k) && num(v) > 0) s.rates[k] = num(v);
     s.accounts = arr(obj.accounts, LIMITS.accounts).map(a => ({ id: str(a.id, 32), name: str(a.name, 60), type: ['cash', 'bank', 'card', 'savings', 'wallet', 'invest'].includes(a.type) ? a.type : 'bank', cur: /^[A-Z]{3}$/.test(a.cur) ? a.cur : s.settings.currency, open: num(a.open), archived: !!a.archived }));

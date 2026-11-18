@@ -1,4 +1,10 @@
 {
+  "1.1.2": {
+    "es": "Ahora Ledger busca actualizaciones al abrir y cada 6 horas, y te avisa cuando hay una nueva. Se puede desactivar en Ajustes → Actualizaciones.",
+    "en": "Ledger now checks for updates on start and every 6 hours and notifies you when one is available. You can turn it off in Settings → Updates.",
+    "pt": "O Ledger agora busca atualizações ao abrir e a cada 6 horas e avisa quando há uma nova. Pode ser desativado em Ajustes → Atualizações.",
+    "fr": "Ledger recherche désormais les mises à jour au démarrage et toutes les 6 heures et vous prévient. Désactivable dans Réglages → Mises à jour."
+  },
   "1.1.0": {
     "es": "Apertura animada de Koluva (compartida con el ecosistema), barra de título propia como Ops y Flow, bienvenida centrada, animaciones de navegación, hover y clic unificadas, y ajustes de pulido.",
     "en": "Koluva opening animation (shared across the ecosystem), custom title bar like Ops and Flow, centered welcome dialog, unified navigation, hover and click animations, and polish fixes.",

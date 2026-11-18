@@ -18,16 +18,21 @@
       ready: `<p><b>${t('upd_ready')}</b></p><button class="btn pri" data-act="updinstall">${t('upd_install')}</button>` }[U.state] || '';
     return body;
   };
+  let notifiedUpd = '';
+  const auto = () => st().settings.autoUpdate !== false;
   async function checkUpdate(silent) {
     if (!Host.canUpdate || U.state === 'checking' || U.state === 'downloading') return;
     U.state = 'checking'; redraw();
     try {
       const r = await Host.update.check(); U.state = r.status; U.manifest = r.manifest || null; try { localStorage.setItem(lastKey, String(Date.now())); } catch {}
-      if (r.status === 'available' && silent) L.toast(t('upd_available', { v: r.manifest.version }), () => L.go('settings'), t('view'));
+      if (r.status === 'available' && silent && notifiedUpd !== r.manifest.version) { notifiedUpd = r.manifest.version; L.toast(t('upd_available', { v: r.manifest.version }), () => L.go('settings'), t('view')); }
     } catch (e) { U.state = silent ? 'idle' : 'error'; U.msg = ''; }
     redraw();
   }
-  L.checkUpdateSoon = () => { let last = 0; try { last = +localStorage.getItem(lastKey) || 0; } catch {} if (Date.now() - last > 12 * 36e5) setTimeout(() => checkUpdate(true), 4000); };
+  L.checkUpdateSoon = () => {
+    if (auto()) setTimeout(() => { if (auto()) checkUpdate(true); }, 4000);
+    setInterval(() => { if (auto() && !document.hidden) checkUpdate(true); }, 6 * 36e5);
+  };
   L.acts.updcheck = () => checkUpdate(false);
   L.acts.upddl = async () => {
     U.state = 'downloading'; U.pct = 0; redraw();
@@ -111,9 +116,10 @@
     <section class="card c6"><h3>${t('reminders')}</h3><label class="chk"><input type="checkbox" ${set.notify ? 'checked' : ''} data-chg="setnotify">${t('remind_on')}</label><label class="f" style="margin-top:10px;max-width:240px">${t('remind_days')}<input type="number" min="0" max="14" step="1" value="${set.remindDays}" data-chg="setpref" data-k="remindDays"></label><p class="small mute" style="margin-top:8px">${t(Host.kind === 'android' ? 'remind_note_android' : 'remind_note')}</p></section>
     <section class="card c6"><h3>${t('security')}</h3><p class="small mute">${t('security_note')}</p><div class="row" style="margin-top:10px">${set.pin ? `<button class="btn" data-act="pinset">${L.icon('lock')}${t('pin_change')}</button><button class="btn danger" data-act="pinoff">${t('pin_off')}</button>` : `<button class="btn" data-act="pinset">${L.icon('lock')}${t('pin_set')}</button>`}</div></section>
     <section class="card c12"><h3>${t('your_data')}</h3><p class="small mute">${t('data_note')}</p><div class="row" style="margin-top:10px"><button class="btn" data-act="exportjson">${L.icon('export')}${t('export_json')}</button><button class="btn" data-act="exportenc">${L.icon('lock')}${t('export_enc')}</button><button class="btn" data-act="importfile">${L.icon('down')}${t('import_backup')}</button><span class="sp"></span><button class="btn danger" data-act="wipe">${L.icon('trash')}${t('wipe')}</button></div></section>
-    <section class="card c12"><h3>${t('updates')}</h3><p class="small mute">${t('version')} <b class="mono" style="letter-spacing:.05em">${esc(Host.version)}</b> · ${t('platform_' + Host.kind)}</p>${Host.canUpdate ? `<div class="row" style="margin:10px 0"><button class="btn" data-act="updcheck">${L.icon('refresh')}${t('upd_check')}</button></div><div id="upd">${updHtml()}</div>` : `<p class="mute">${t('upd_web')}</p>`}</section>
+    <section class="card c12"><h3>${t('updates')}</h3><p class="small mute">${t('version')} <b class="mono" style="letter-spacing:.05em">${esc(Host.version)}</b> · ${t('platform_' + Host.kind)}</p>${Host.canUpdate ? `<div class="row" style="margin:10px 0"><button class="btn" data-act="updcheck">${L.icon('refresh')}${t('upd_check')}</button></div><label class="chk full" style="margin-bottom:8px"><input type="checkbox" ${auto() ? 'checked' : ''} data-chg="setautoupd">${t('auto_upd')}</label><div id="upd">${updHtml()}</div>` : `<p class="mute">${t('upd_web')}</p>`}</section>
     <section class="card c12"><h3>${t('about')}</h3><p><b>Koluva Ledger</b> — ${t('summary')}</p><p class="small mute" style="margin-top:6px">${t('tagline')}</p><div class="row" style="margin-top:10px"><button class="btn sm" data-act="openurl" data-u="https://koluva.com">koluva.com</button><button class="btn sm" data-act="openurl" data-u="https://github.com/${cfg.repo}">GitHub</button><button class="btn sm" data-act="license">${t('license_title')}</button></div></section></div>`;
   };
+  L.acts.setautoupd = el => { st().settings.autoUpdate = el.checked; L.changed(); if (el.checked) checkUpdate(true); };
   L.acts.setopen = el => { st().settings.opening = el.checked; L.changed(); };
   L.acts.license = () => L.modal({ title: t('license_title'), body: `<p style="white-space:pre-line" class="small">${esc(t('license_text'))}</p>`, actions: [{ label: t('close'), kind: 'pri' }] });
 
