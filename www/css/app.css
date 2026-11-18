@@ -116,10 +116,20 @@ dialog header{display:flex;justify-content:space-between;align-items:center;padd
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 /* barra de título propia (Windows, como Ops/Flow) */
-.is-win .titlebar{position:relative;height:46px;min-height:46px;padding:0 calc(100vw - env(titlebar-area-width,calc(100vw - 140px)) + 12px) 0 14px;background:var(--bg);-webkit-app-region:drag;user-select:none}
-.is-win .titlebar img{height:24px}
-.is-win .titlebar .acts{-webkit-app-region:no-drag}
-.is-win .titlebar .acts .btn{min-height:30px;padding:4px 12px;font-size:13px;border-radius:10px}
+.brand{display:flex;align-items:center;gap:12px;height:100%}
+.brand .wm{height:26px;width:auto;max-width:150px;object-fit:contain;object-position:left center}
+.text-button{border:0;background:transparent;color:var(--red);font-weight:600;padding:7px 10px;border-radius:8px;display:inline-flex;gap:6px;align-items:center;transition:background .22s var(--ease),color .22s var(--ease)}
+.text-button:hover{background:color-mix(in srgb,var(--red) 10%,transparent)}
+.text-button svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+.is-win .titlebar{position:relative;height:46px;min-height:46px;padding:0 0 0 12px;background:var(--surface);-webkit-app-region:drag;user-select:none}
+.is-win .titlebar .brand,.is-win .titlebar .acts{-webkit-app-region:no-drag}
+.is-win .titlebar .acts{gap:6px;font-size:12px}
+.is-win .titlebar #save{display:none}
+.wc{display:flex;height:46px;margin-left:8px;-webkit-app-region:no-drag}
+.wc button{width:46px;height:46px;border:0;background:transparent;color:var(--text);display:grid;place-items:center;transition:background .18s var(--ease),color .18s}
+.wc button svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.wc button:hover{background:var(--raise)}.wc button.x:hover{background:#C8102E;color:#fff}
+.wc button:focus-visible{outline-offset:-3px}
 .is-win .app{grid-template-rows:46px 1fr}
 main.enter .page>*{animation:in .38s var(--ease) both}
 main.enter .page>*:nth-child(2){animation-delay:.05s}main.enter .page>*:nth-child(3){animation-delay:.1s}main.enter .page>*:nth-child(4){animation-delay:.15s}main.enter .page>*:nth-child(n+5){animation-delay:.2s}

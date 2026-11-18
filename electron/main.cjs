@@ -16,7 +16,7 @@ const readSafe = f => { try { const s = fs.statSync(f); if (!s.isFile() || s.siz
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 1280, height: 820, minWidth: 420, minHeight: 600, show: false, backgroundColor: '#141416', title: 'Koluva Ledger', titleBarStyle: 'hidden', titleBarOverlay: { color: '#141416', symbolColor: '#ffffff', height: 46 },
+    width: 1280, height: 820, minWidth: 420, minHeight: 600, show: false, backgroundColor: '#141416', title: 'Koluva Ledger', titleBarStyle: 'hidden',
     icon: path.join(__dirname, '../www/assets/app-icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true, devTools: !app.isPackaged },
   });
@@ -25,6 +25,7 @@ function createWindow() {
   win.once('ready-to-show', () => win.show());
   win.webContents.on('will-navigate', e => e.preventDefault());
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  win.on('maximize', () => win.webContents.send('ledger:win:state', true)); win.on('unmaximize', () => win.webContents.send('ledger:win:state', false));
   win.on('closed', () => { win = null; });
 }
 
@@ -62,7 +63,11 @@ ipcMain.handle('ledger:openExternal', (_e, url) => {
   const ok = u.protocol === 'https:' && (u.hostname === 'koluva.com' || u.hostname === 'www.koluva.com' || (u.hostname === 'github.com' && u.pathname.startsWith('/' + rel.repo)));
   if (ok) shell.openExternal(u.href); return ok;
 });
-ipcMain.on('ledger:theme', (_e, dark) => { if (win && typeof win.setTitleBarOverlay === 'function') { try { win.setTitleBarOverlay({ color: dark ? '#141416' : '#ffffff', symbolColor: dark ? '#ffffff' : '#141416', height: 46 }); } catch {} } });
+ipcMain.on('ledger:win', (_e, cmd) => {
+  if (!win) return;
+  if (cmd === 'min') win.minimize(); else if (cmd === 'max') { if (win.isMaximized()) win.unmaximize(); else win.maximize(); } else if (cmd === 'close') win.close();
+});
+ipcMain.handle('ledger:win:isMax', () => !!win && win.isMaximized());
 ipcMain.on('ledger:version', e => { e.returnValue = pkg.version; });
 
 /* ----- actualizaciones ----- */
@@ -78,5 +83,5 @@ ipcMain.handle('ledger:upd:download', async (e, manifest) => {
 });
 ipcMain.handle('ledger:upd:install', () => {
   if (!pendingInstaller || !fs.existsSync(pendingInstaller)) throw Error('No hay instalador verificado.');
-  const child = spawn(pendingInstaller, [], { detached: true, stdio: 'ignore' }); child.unref(); setTimeout(() => app.quit(), 300); return true;
+  const child = spawn(pendingInstaller, ['/S', '--updated', '--force-run', '/currentuser'], { detached: true, stdio: 'ignore', windowsHide: true }); child.unref(); setTimeout(() => app.quit(), 400); return true;
 });

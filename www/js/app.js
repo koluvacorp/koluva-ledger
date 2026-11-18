@@ -42,14 +42,28 @@
   };
   L.icon = (n, cls) => `<svg class="${cls || 'ico'}" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ''}</svg>`;
 
+  /* ---------- controles de ventana propios (Windows) ---------- */
+  L.winControls = () => {
+    const w = window.ledgerHost && window.ledgerHost.win, host = document.querySelector('.titlebar .acts');
+    if (!w || !host || host.querySelector('.wc')) return;
+    const svg = d => `<svg viewBox="0 0 12 12" aria-hidden="true">${d}</svg>`;
+    const ic = { min: svg('<path d="M2 6h8"/>'), max: svg('<rect x="2.5" y="2.5" width="7" height="7" rx="1"/>'), res: svg('<path d="M4.5 2.5h5v5M2.5 4.5h5v5h-5z"/>'), close: svg('<path d="M2.5 2.5l7 7M9.5 2.5l-7 7"/>') };
+    const box = document.createElement('div'); box.className = 'wc';
+    box.innerHTML = `<button type="button" data-c="min" aria-label="${L.esc(L.t('win_min'))}">${ic.min}</button><button type="button" data-c="max" aria-label="${L.esc(L.t('win_max'))}">${ic.max}</button><button type="button" data-c="close" class="x" aria-label="${L.esc(L.t('win_close'))}">${ic.close}</button>`;
+    box.onclick = e => { const b = e.target.closest('button'); if (b) w.cmd(b.dataset.c); };
+    const mark = m => { const b = box.querySelector('[data-c=max]'); b.innerHTML = m ? ic.res : ic.max; };
+    w.onState(mark); w.isMax().then(mark); host.append(box); document.documentElement.classList.add('has-wc');
+  };
+
   /* ---------- tema y movimiento ---------- */
   L.applyPrefs = () => {
     const s = S.state.settings, root = document.documentElement;
     const dark = s.theme === 'dark' || (s.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
     root.dataset.theme = dark ? 'dark' : 'light'; root.dataset.motion = s.motion; root.lang = s.lang;
     document.title = 'Koluva Ledger';
-    if (window.ledgerHost) { root.classList.add('is-win'); if (window.ledgerHost.setTheme) window.ledgerHost.setTheme(dark); }
+    if (window.ledgerHost) { root.classList.add('is-win'); L.winControls(); }
     document.querySelectorAll('.logo-l').forEach(i => { i.src = `assets/koluva-ledger-imagotipo-${dark ? 'white' : 'ink'}.svg`; });
+    document.querySelectorAll('.wm').forEach(i => { i.src = `assets/koluva-ledger-logotipo-${dark ? 'white' : 'ink'}.svg`; });
     const q = document.getElementById('quick'); if (q) q.innerHTML = L.icon('plus') + L.esc(L.t('add'));
   };
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (S.state) L.applyPrefs(); });

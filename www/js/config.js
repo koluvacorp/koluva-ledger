@@ -1,1 +1,1 @@
-window.LEDGER_CFG={"version":"1.1.0","repo":"koluvacorp/koluva-ledger"};
+window.LEDGER_CFG={"version":"1.1.1","repo":"koluvacorp/koluva-ledger"};

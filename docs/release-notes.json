@@ -10,5 +10,11 @@
     "en": "First release: Safe to spend today, envelope budgets, 90-day balance forecast, subscription detector, debt payoff plan, shared expenses, goals, reports, encrypted backups, PIN and reminders. Windows and Android.",
     "pt": "Primeira versão: Você pode gastar hoje, orçamento em envelopes, previsão de saldo a 90 dias, detector de assinaturas, plano de dívidas, gastos compartilhados, metas, relatórios, backups criptografados, PIN e lembretes. Windows e Android.",
     "fr": "Première version : Disponible aujourd’hui, budget par enveloppes, prévision de solde à 90 jours, détecteur d’abonnements, plan de dettes, dépenses partagées, objectifs, rapports, sauvegardes chiffrées, PIN et rappels. Windows et Android."
+  },
+  "1.1.1": {
+    "es": "Controles de ventana propios (minimizar, maximizar, cerrar) y barra superior igual a Ops. Al actualizar en Windows la app se reinstala sola y se reabre, sin asistente. Tus datos no se tocan.",
+    "en": "Custom window controls (minimize, maximize, close) and a top bar matching Ops. On Windows, updating reinstalls and reopens the app automatically, with no wizard. Your data is untouched.",
+    "pt": "Controles de janela próprios (minimizar, maximizar, fechar) e barra superior igual à do Ops. No Windows, ao atualizar o app se reinstala e reabre sozinho, sem assistente. Seus dados não são alterados.",
+    "fr": "Contrôles de fenêtre personnalisés (réduire, agrandir, fermer) et barre supérieure identique à Ops. Sous Windows, la mise à jour réinstalle et rouvre l’application automatiquement, sans assistant. Vos données restent intactes."
   }
 }
