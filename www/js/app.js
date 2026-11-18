@@ -48,6 +48,7 @@
     const dark = s.theme === 'dark' || (s.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
     root.dataset.theme = dark ? 'dark' : 'light'; root.dataset.motion = s.motion; root.lang = s.lang;
     document.title = 'Koluva Ledger';
+    if (window.ledgerHost) { root.classList.add('is-win'); if (window.ledgerHost.setTheme) window.ledgerHost.setTheme(dark); }
     document.querySelectorAll('.logo-l').forEach(i => { i.src = `assets/koluva-ledger-imagotipo-${dark ? 'white' : 'ink'}.svg`; });
     const q = document.getElementById('quick'); if (q) q.innerHTML = L.icon('plus') + L.esc(L.t('add'));
   };
@@ -102,7 +103,7 @@
 
   /* ---------- navegación ---------- */
   const NAV = ['home', 'tx', 'budget', 'plan', 'goals', 'debts', 'shared', 'accounts', 'reports'];
-  L.go = (p, ym) => { L.page = p; if (ym) L.ym = ym; L.render(); document.getElementById('main').scrollTop = 0; };
+  L.go = (p, ym) => { L.page = p; if (ym) L.ym = ym; const m = document.getElementById('main'); m.classList.remove('enter'); L.render(); m.scrollTop = 0; void m.offsetWidth; m.classList.add('enter'); };
   function drawNav() {
     const item = (p, extra = '') => `<button class="nav-item" data-act="go" data-p="${p}" ${L.page === p ? 'aria-current="page"' : ''}>${L.icon(p)}<span>${L.esc(L.t('nav_' + p))}</span></button>`;
     document.getElementById('nav').innerHTML = NAV.map(p => item(p)).join('');

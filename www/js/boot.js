@@ -8,7 +8,7 @@
     const s = S.state;
     if (r.fresh) {
       if (r.corrupt) L.toast(L.t('corrupt'));
-      L.render(); await L.setup(); L.render(); if (!s.settings.tourDone) await L.tour();
+      L.render(); await L.opening(); await L.setup(); L.render(); if (!s.settings.tourDone) await L.tour();
     } else {
       if (r.recovered) L.toast(L.t('recovered'));
       const made = C.applyDueRecurring(s); C.snapshotWorth(s); if (made) { S.touch(); L.toast(L.t('auto_created', { n: made })); }

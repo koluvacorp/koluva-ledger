@@ -48,7 +48,10 @@ main{overflow:auto;padding:24px 28px 40px;scroll-behavior:smooth}
 .big2{font:500 28px/1.1 Outfit,sans-serif;font-variant-numeric:tabular-nums}
 .mute{color:var(--mute)}.small{font-size:13px}
 .btn{border:1px solid var(--line);background:var(--raise);padding:9px 14px;border-radius:12px;font-weight:500;display:inline-flex;gap:8px;align-items:center;justify-content:center;transition:transform .15s var(--ease),background .15s;min-height:40px}
-.btn:hover{background:var(--surface)}.btn:active{transform:scale(.97)}
+.btn{transform-style:preserve-3d;transition:transform .48s cubic-bezier(.2,.7,.2,1),background-color .3s,border-color .3s,color .3s,box-shadow .3s}
+.btn:hover,.btn:focus-visible{background:var(--surface)}
+@media (hover:hover){.btn:not(:disabled):hover{transform:perspective(900px) rotateX(3deg) rotateY(-3deg) translateY(-2px) translateZ(3px);box-shadow:0 8px 18px -10px rgba(0,0,0,.45)}}
+.btn:not(:disabled):active{transform:perspective(900px) rotateX(1deg) rotateY(-1deg) translateY(0) translateZ(0);transition-duration:.12s}
 .btn.pri{background:var(--red);border-color:var(--red);color:var(--onred)}.btn.pri:hover{background:var(--gran);border-color:var(--gran)}
 .btn.ghost{border-color:transparent;background:none}.btn.danger{color:var(--gran)}:root[data-theme=dark] .btn.danger{color:#fff;border-color:var(--gran)}
 .btn.sm{padding:5px 10px;min-height:32px;font-size:13px;border-radius:10px}
@@ -77,9 +80,9 @@ label.chk{display:flex;gap:10px;align-items:center;font-weight:400;color:var(--t
 table{width:100%;border-collapse:collapse}th{font:500 11px "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);text-align:left;padding:6px 8px}td{padding:9px 8px;border-top:1px solid var(--line)}td.r,th.r{text-align:right}
 svg.chart{width:100%;height:auto;display:block;overflow:visible}svg.chart text{font:500 10px "IBM Plex Mono",monospace;fill:var(--mute)}
 /* modal, toast, lock */
-dialog{border:0;border-radius:18px;padding:0;background:var(--bg);color:var(--text);width:min(560px,calc(100vw - 24px));max-height:calc(100vh - 24px);box-shadow:0 0 0 1px var(--line),0 24px 60px rgba(0,0,0,.35)}
+dialog{margin:auto;border:0;border-radius:18px;padding:0;background:var(--bg);color:var(--text);width:min(560px,calc(100vw - 24px));max-height:calc(100vh - 24px);box-shadow:0 0 0 1px var(--line),0 24px 60px rgba(0,0,0,.35)}
 dialog::backdrop{background:rgba(20,20,22,.6)}
-dialog[open]{animation:in .25s var(--ease)}
+dialog[open]{animation:pop .28s var(--ease)}dialog[open]::backdrop{animation:fade .25s ease}
 dialog form{display:flex;flex-direction:column;max-height:calc(100vh - 24px)}
 dialog header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px 8px}
 #mbody{padding:8px 18px 12px;overflow:auto}
@@ -110,6 +113,18 @@ dialog header{display:flex;justify-content:space-between;align-items:center;padd
 }
 @media (max-width:899px) and (pointer:fine){.side{display:none}}
 @media (min-width:900px) and (pointer:fine){.tabbar{display:none}}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+/* barra de título propia (Windows, como Ops/Flow) */
+.is-win .titlebar{position:relative;height:46px;min-height:46px;padding:0 calc(100vw - env(titlebar-area-width,calc(100vw - 140px)) + 12px) 0 14px;background:var(--bg);-webkit-app-region:drag;user-select:none}
+.is-win .titlebar img{height:24px}
+.is-win .titlebar .acts{-webkit-app-region:no-drag}
+.is-win .titlebar .acts .btn{min-height:30px;padding:4px 12px;font-size:13px;border-radius:10px}
+.is-win .app{grid-template-rows:46px 1fr}
+main.enter .page>*{animation:in .38s var(--ease) both}
+main.enter .page>*:nth-child(2){animation-delay:.05s}main.enter .page>*:nth-child(3){animation-delay:.1s}main.enter .page>*:nth-child(4){animation-delay:.15s}main.enter .page>*:nth-child(n+5){animation-delay:.2s}
+.card{transition:transform .2s var(--ease),border-color .2s,box-shadow .2s}
+@media (hover:hover){.card:hover{border-color:var(--line);transform:translateY(-1px)}}
 @media print{.side,.tabbar,.titlebar,.btn{display:none!important}main{overflow:visible}body{overflow:visible}}
 :root[data-motion=off] *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 :root[data-motion=off] .nav-item{--s:1!important}

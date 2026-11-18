@@ -1,4 +1,10 @@
 {
+  "1.1.0": {
+    "es": "Apertura animada de Koluva (compartida con el ecosistema), barra de título propia como Ops y Flow, bienvenida centrada, animaciones de navegación, hover y clic unificadas, y ajustes de pulido.",
+    "en": "Koluva opening animation (shared across the ecosystem), custom title bar like Ops and Flow, centered welcome dialog, unified navigation, hover and click animations, and polish fixes.",
+    "pt": "Animação de abertura Koluva (compartilhada com o ecossistema), barra de título própria como Ops e Flow, boas-vindas centralizada, animações unificadas de navegação, hover e clique, e ajustes de acabamento.",
+    "fr": "Animation d’ouverture Koluva (partagée dans l’écosystème), barre de titre personnalisée comme Ops et Flow, fenêtre d’accueil centrée, animations de navigation, survol et clic unifiées, et finitions."
+  },
   "1.0.0": {
     "es": "Primera versión: Podés gastar hoy, presupuesto en sobres, pronóstico de saldo a 90 días, detector de suscripciones, plan de deudas, gastos compartidos, metas, reportes, copias cifradas, PIN y recordatorios. Windows y Android.",
     "en": "First release: Safe to spend today, envelope budgets, 90-day balance forecast, subscription detector, debt payoff plan, shared expenses, goals, reports, encrypted backups, PIN and reminders. Windows and Android.",

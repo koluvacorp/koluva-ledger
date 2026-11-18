@@ -16,7 +16,7 @@ const readSafe = f => { try { const s = fs.statSync(f); if (!s.isFile() || s.siz
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 1280, height: 820, minWidth: 420, minHeight: 600, show: false, backgroundColor: '#141416', title: 'Koluva Ledger',
+    width: 1280, height: 820, minWidth: 420, minHeight: 600, show: false, backgroundColor: '#141416', title: 'Koluva Ledger', titleBarStyle: 'hidden', titleBarOverlay: { color: '#141416', symbolColor: '#ffffff', height: 46 },
     icon: path.join(__dirname, '../www/assets/app-icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true, devTools: !app.isPackaged },
   });
@@ -62,6 +62,7 @@ ipcMain.handle('ledger:openExternal', (_e, url) => {
   const ok = u.protocol === 'https:' && (u.hostname === 'koluva.com' || u.hostname === 'www.koluva.com' || (u.hostname === 'github.com' && u.pathname.startsWith('/' + rel.repo)));
   if (ok) shell.openExternal(u.href); return ok;
 });
+ipcMain.on('ledger:theme', (_e, dark) => { if (win && typeof win.setTitleBarOverlay === 'function') { try { win.setTitleBarOverlay({ color: dark ? '#141416' : '#ffffff', symbolColor: dark ? '#ffffff' : '#141416', height: 46 }); } catch {} } });
 ipcMain.on('ledger:version', e => { e.returnValue = pkg.version; });
 
 /* ----- actualizaciones ----- */

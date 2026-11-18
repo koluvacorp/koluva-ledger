@@ -157,13 +157,8 @@
   };
 
   /* ---------- APERTURA (propia de Ledger: los pilares suben como peldaños) ---------- */
-  L.opening = () => new Promise(resolve => {
-    if (!st().settings.opening || !L.motionOn()) return resolve();
-    const layer = document.getElementById('layer'), o = document.createElement('div'); o.className = 'open'; o.setAttribute('aria-hidden', 'true');
-    o.innerHTML = `<div class="stage">${window.LEDGER_ISO}<div class="word">${'LEDGER'.split('').map((c, k) => `<span style="animation-delay:${.9 + k * .04}s">${c}</span>`).join('')}</div><div class="rule"></div></div><span class="skip">${esc(t('skip_hint'))}</span>`;
-    layer.append(o); let done = false;
-    const finish = () => { if (done) return; done = true; document.removeEventListener('keydown', key, true); o.classList.add('out'); setTimeout(() => { o.remove(); resolve(); }, L.motionOn() ? 420 : 0); };
-    const key = e => { if (e.key === 'Escape' || e.key === 'Tab' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); finish(); } };
-    o.addEventListener('click', finish); document.addEventListener('keydown', key, true); setTimeout(finish, 2100);
-  });
+  L.opening = () => {
+    if (!st().settings.opening || !L.motionOn() || !window.KolivaIntro) return Promise.resolve();
+    return window.KolivaIntro.play({ iso: 'assets/koluva-ledger-isotipo-white.svg', pattern: 'assets/ledger-isotipo-pattern.svg', color: '#C8102E', duration: 2000 });
+  };
 })();
