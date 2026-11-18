@@ -1,0 +1,8 @@
+{
+  "appId": "com.koluva.ledger",
+  "appName": "Koluva Ledger",
+  "webDir": "www",
+  "backgroundColor": "#141416",
+  "android": { "allowMixedContent": false, "backgroundColor": "#141416", "webContentsDebuggingEnabled": false },
+  "server": { "androidScheme": "https" }
+}

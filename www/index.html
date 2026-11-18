@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es" data-motion="system">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<title>Koluva Ledger</title>
+<link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="app" id="app" hidden>
+  <header class="titlebar">
+    <img class="logo-l" src="assets/koluva-ledger-imagotipo-ink.svg" alt="Koluva Ledger">
+    <div class="acts"><span id="save" class="mono" role="status"></span><button class="btn sm" id="quick" aria-keyshortcuts="N"></button></div>
+  </header>
+  <aside class="side"><nav id="nav" aria-label="Main"></nav><div class="foot" id="foot"></div></aside>
+  <main id="main" tabindex="-1"></main>
+  <nav class="tabbar" id="tabbar" aria-label="Main"></nav>
+</div>
+<dialog id="modal" aria-labelledby="mtitle"><form method="dialog" id="mform" novalidate><header><h2 id="mtitle"></h2><button type="button" class="btn ghost sm" id="mclose" aria-label="×">✕</button></header><div id="mbody"></div><footer id="mfoot"></footer></form></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="layer"></div>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/store.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/brand.js"></script>
+<script src="js/app.js"></script>
+<script src="js/pages1.js"></script>
+<script src="js/pages2.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/boot.js"></script>
+</body>
+</html>
