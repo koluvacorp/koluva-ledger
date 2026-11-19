@@ -1,4 +1,10 @@
 {
+  "1.2.2": {
+    "es": "Corrige el inicio en Android: la app quedaba en blanco o con un error al abrir. Ya arranca con normalidad. Tus datos no se tocan.",
+    "en": "Fixes startup on Android: the app showed a blank screen or an error on launch. It now starts normally. Your data is untouched.",
+    "pt": "Corrige a inicialização no Android: o app ficava em branco ou com um erro ao abrir. Agora inicia normalmente. Seus dados não são alterados.",
+    "fr": "Corrige le démarrage sur Android : l’application restait vide ou affichait une erreur à l’ouverture. Elle démarre maintenant normalement. Vos données restent intactes."
+  },
   "1.2.1": {
     "es": "Más robusta al iniciar: la animación de apertura nunca bloquea la app y, si algo falla, ahora muestra el detalle del error para poder resolverlo. Tus datos no se tocan.",
     "en": "More robust at startup: the opening animation never blocks the app and, if something fails, it now shows the error details so it can be fixed. Your data is untouched.",

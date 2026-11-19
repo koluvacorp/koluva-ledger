@@ -5,7 +5,8 @@
   const cfg = window.LEDGER_CFG;
   const E = window.ledgerHost;
   const isCap = !E && window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform();
-  const N = isCap ? window.Capacitor.registerPlugin('LedgerNative') : null;
+  // En Android el puente nativo expone los plugins en Capacitor.Plugins; registerPlugin solo existe si se empaqueta @capacitor/core.
+  const N = isCap ? ((window.Capacitor.Plugins && window.Capacitor.Plugins.LedgerNative) || (typeof window.Capacitor.registerPlugin === 'function' ? window.Capacitor.registerPlugin('LedgerNative') : null)) : null;
   const KEY = 'koluva-ledger-state';
 
   async function verifyManifest(text) {
