@@ -61,7 +61,7 @@
     const dark = s.theme === 'dark' || (s.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
     root.dataset.theme = dark ? 'dark' : 'light'; root.dataset.motion = s.motion; root.lang = s.lang;
     document.title = 'Koluva Ledger';
-    if (window.ledgerHost) { root.classList.add('is-win'); L.winControls(); }
+    if (window.ledgerHost) { root.classList.add('is-win'); try { L.winControls(); } catch {} }
     document.querySelectorAll('.logo-l').forEach(i => { i.src = `assets/koluva-ledger-imagotipo-${dark ? 'white' : 'ink'}.svg`; });
     document.querySelectorAll('.wm').forEach(i => { i.src = `assets/koluva-ledger-logotipo-${dark ? 'white' : 'ink'}.svg`; });
     const q = document.getElementById('quick'); if (q) q.innerHTML = L.icon('plus') + L.esc(L.t('add'));

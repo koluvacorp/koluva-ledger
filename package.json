@@ -1,7 +1,7 @@
 {
   "name": "koluva-ledger",
   "productName": "Koluva Ledger",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Autogestión financiera local para Windows y Android.",
   "author": "Koluva",
   "license": "SEE LICENSE IN LICENSE",

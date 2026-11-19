@@ -105,6 +105,6 @@ Les projections et scores sont indicatifs et ne constituent pas un conseil finan
 
 ## Enlaces de descarga directa (campo *link*)
 
-- Windows: `https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.2.0/KoluvaLedger-1.2.0-Windows-x64-Setup.exe`
-- Android: `https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.2.0/KoluvaLedger-1.2.0-Android.apk`
+- Windows: `https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.2.1/KoluvaLedger-1.2.1-Windows-x64-Setup.exe`
+- Android: `https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.2.1/KoluvaLedger-1.2.1-Android.apk`
 - Página de versiones: `https://github.com/koluvacorp/koluva-ledger/releases/latest`

@@ -177,6 +177,7 @@
   /* ---------- APERTURA (propia de Ledger: los pilares suben como peldaños) ---------- */
   L.opening = () => {
     if (!st().settings.opening || !L.motionOn() || !window.KolivaIntro) return Promise.resolve();
-    return window.KolivaIntro.play({ iso: 'assets/koluva-ledger-isotipo-white.svg', pattern: 'assets/ledger-isotipo-pattern.svg', color: '#C8102E', duration: 2000 });
+    // La apertura es decorativa: si falla en algún dispositivo, la app debe iniciar igual.
+    try { return Promise.resolve(window.KolivaIntro.play({ iso: 'assets/koluva-ledger-isotipo-white.svg', pattern: 'assets/ledger-isotipo-pattern.svg', color: '#C8102E', duration: 2000 })).catch(() => {}); } catch { return Promise.resolve(); }
   };
 })();

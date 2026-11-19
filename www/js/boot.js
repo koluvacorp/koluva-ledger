@@ -17,6 +17,10 @@
     L.schedule(); L.checkUpdateSoon();
     setInterval(() => { const m = C.applyDueRecurring(S.state); if (m) { S.touch(); L.render(); } }, 6 * 36e5);
   } catch (e) {
-    document.body.innerHTML = '<p style="padding:24px;font:16px system-ui">Koluva Ledger: no se pudo iniciar / could not start.</p>'; console.error(e);
+    const esc = v => String(v == null ? '' : v).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    const cap = window.Capacitor, NL = String.fromCharCode(10), info = ['Koluva Ledger ' + ((window.LEDGER_CFG && window.LEDGER_CFG.version) || '?'), 'plataforma: ' + (cap && cap.getPlatform ? cap.getPlatform() : 'web'), 'navegador: ' + navigator.userAgent].join(NL);
+    const detail = ((e && (e.name || 'Error')) + ': ' + (e && e.message) + NL + String((e && e.stack) || '').split(NL).slice(0, 8).join(NL) + NL + NL + info);
+    document.body.innerHTML = '<div style="padding:24px;font:15px/1.5 system-ui;color:#222;background:#fff;min-height:100vh"><p><b>Koluva Ledger no pudo iniciar / could not start.</b></p><p>Tus datos no se tocaron. Copiá este detalle y enviáselo a Koluva (koluvacorp@gmail.com):</p><pre style="white-space:pre-wrap;word-break:break-word;background:#f3f3f3;padding:12px;border-radius:8px;font-size:12px">' + esc(detail) + '</pre><button id="retry" style="padding:12px 18px;font-size:15px;border-radius:10px;border:0;background:#C8102E;color:#fff">Reintentar / Retry</button></div>';
+    const rb = document.getElementById('retry'); if (rb) rb.onclick = () => location.reload(); console.error(e);
   }
 })();

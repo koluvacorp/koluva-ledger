@@ -1,4 +1,10 @@
 {
+  "1.2.1": {
+    "es": "Más robusta al iniciar: la animación de apertura nunca bloquea la app y, si algo falla, ahora muestra el detalle del error para poder resolverlo. Tus datos no se tocan.",
+    "en": "More robust at startup: the opening animation never blocks the app and, if something fails, it now shows the error details so it can be fixed. Your data is untouched.",
+    "pt": "Mais robusto ao iniciar: a animação de abertura nunca bloqueia o app e, se algo falhar, agora mostra os detalhes do erro para resolver. Seus dados não são alterados.",
+    "fr": "Plus robuste au démarrage : l’animation d’ouverture ne bloque jamais l’application et, en cas de problème, elle affiche désormais le détail de l’erreur pour le corriger. Vos données restent intactes."
+  },
   "1.2.0": {
     "es": "Nuevos avisos opcionales: presupuesto al 90 % y versión nueva disponible, además de los pagos próximos. Todos se pueden apagar en Ajustes.",
     "en": "New optional alerts: budget at 90% and new version available, in addition to upcoming payments. All can be turned off in Settings.",

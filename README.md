@@ -6,8 +6,8 @@ Autogestión financiera local para **Windows** y **Android**. Sin cuenta, sin nu
 
 | Plataforma | Enlace |
 |---|---|
-| Windows x64 | https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.2.0/KoluvaLedger-1.2.0-Windows-x64-Setup.exe |
-| Android (APK) | https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.2.0/KoluvaLedger-1.2.0-Android.apk |
+| Windows x64 | https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.2.1/KoluvaLedger-1.2.1-Windows-x64-Setup.exe |
+| Android (APK) | https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.2.1/KoluvaLedger-1.2.1-Android.apk |
 | Todas las versiones | https://github.com/koluvacorp/koluva-ledger/releases |
 
 Windows: el instalador no tiene firma Authenticode; SmartScreen puede avisar. Android: permití «instalar apps desconocidas» para tu navegador la primera vez.
