@@ -112,7 +112,7 @@
   L.options = (list, sel) => list.map(x => [x.id, x.name]);
 
   /* ---------- guardar / cambios ---------- */
-  L.changed = (keepModal) => { C.snapshotWorth(S.state); S.touch(); L.render(); L.schedule?.(); };
+  L.changed = (keepModal) => { C.snapshotWorth(S.state); S.touch(); L.render(); L.schedule?.(); L.checkBudgetAlerts?.(); };
   S.onStatus = st => { const e = document.getElementById('save'); if (e) e.textContent = ({ pending: '…', saving: '…', saved: L.t('saved'), error: L.t('save_error') })[st] || ''; if (st === 'error') L.toast(L.t('save_error')); };
 
   /* ---------- navegación ---------- */

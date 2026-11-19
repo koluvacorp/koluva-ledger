@@ -25,7 +25,7 @@
     U.state = 'checking'; redraw();
     try {
       const r = await Host.update.check(); U.state = r.status; U.manifest = r.manifest || null; try { localStorage.setItem(lastKey, String(Date.now())); } catch {}
-      if (r.status === 'available' && silent && notifiedUpd !== r.manifest.version) { notifiedUpd = r.manifest.version; L.toast(t('upd_available', { v: r.manifest.version }), () => L.go('settings'), t('view')); }
+      if (r.status === 'available' && silent && notifiedUpd !== r.manifest.version) { notifiedUpd = r.manifest.version; L.toast(t('upd_available', { v: r.manifest.version }), () => L.go('settings'), t('view')); if (st().settings.notifyUpdate !== false) { try { Host.notify('Koluva Ledger', t('upd_available', { v: r.manifest.version })); } catch {} } }
     } catch (e) { U.state = silent ? 'idle' : 'error'; U.msg = ''; }
     redraw();
   }
@@ -100,6 +100,18 @@
   L.acts.setcur = el => { const v = el.value.toUpperCase(); if (/^[A-Z]{3}$/.test(v)) { st().settings.currency = v; L.changed(); } else { L.toast(t('err_cur')); el.value = st().settings.currency; } };
   L.acts.setrate = el => { const v = L.num(el.value); if (v > 0) { st().rates[el.name] = v; L.changed(); } else { delete st().rates[el.name]; L.changed(); } };
   L.acts.setnotify = async el => { const s = st().settings; s.notify = el.checked; if (s.notify && Host.kind === 'web') { try { await Notification.requestPermission(); } catch {} } if (s.notify && Host.kind === 'android') { try { await Host.notify(t('notif_on_title'), t('notif_on_body')); } catch {} } L.changed(); };
+  let budgetSeen = new Set(); try { budgetSeen = new Set(JSON.parse(localStorage.getItem('ledger-budget-notified') || '[]')); } catch {}
+  L.checkBudgetAlerts = () => {
+    const s = st(); if (!s || !s.settings || s.settings.notifyBudget === false) return;
+    const ym = C.monthOf(C.today()); let changed = false;
+    for (const b of C.budgetStatus(s, ym)) {
+      const lvl = b.pct > 1 ? 2 : b.pct >= 0.9 ? 1 : 0; if (!lvl) continue;
+      const key = ym + ':' + b.cat.id + ':' + lvl; if (budgetSeen.has(key)) continue;
+      budgetSeen.add(key); changed = true;
+      try { Host.notify(t(lvl === 2 ? 'notif_budget_over' : 'notif_budget_near'), t('notif_budget_body', { c: b.cat.name, p: Math.round(b.pct * 100), l: L.money(b.limit, s.settings.currency) })); } catch {}
+    }
+    if (changed) { try { localStorage.setItem('ledger-budget-notified', JSON.stringify([...budgetSeen].slice(-200))); } catch {} }
+  };
   L.acts.tour = () => L.tour();
   L.acts.openurl = el => Host.openExternal(el.dataset.u);
   L.pages.settings = () => {
@@ -113,7 +125,7 @@
       <label class="chk full"><input type="checkbox" ${set.opening ? 'checked' : ''} data-chg="setopen">${t('opening')}</label></div><button class="btn" style="margin-top:12px" data-act="tour">${t('tour_again')}</button></section>
     <section class="card c6"><h3>${t('profile')}</h3><div class="form"><label class="f">${t('your_name')}<input value="${esc(set.name)}" data-inp="setname" maxlength="60"></label><label class="f">${t('base_currency')}<input value="${esc(set.currency)}" list="curs" maxlength="3" style="text-transform:uppercase" data-chg="setcur"></label>${L.curList}</div>
       ${used.length ? `<h3 style="margin:14px 0 6px">${t('rates')}</h3><p class="small mute">${t('rates_help', { cur: set.currency })}</p><div class="form">${used.map(c => `<label class="f">1 ${esc(c)} = ? ${esc(set.currency)}<input type="number" min="0" step="any" name="${esc(c)}" value="${s.rates[c] || ''}" data-chg="setrate"></label>`).join('')}</div>` : ''}</section>
-    <section class="card c6"><h3>${t('reminders')}</h3><label class="chk"><input type="checkbox" ${set.notify ? 'checked' : ''} data-chg="setnotify">${t('remind_on')}</label><label class="f" style="margin-top:10px;max-width:240px">${t('remind_days')}<input type="number" min="0" max="14" step="1" value="${set.remindDays}" data-chg="setpref" data-k="remindDays"></label><p class="small mute" style="margin-top:8px">${t(Host.kind === 'android' ? 'remind_note_android' : 'remind_note')}</p></section>
+    <section class="card c6"><h3>${t('reminders')}</h3><label class="chk"><input type="checkbox" ${set.notify ? 'checked' : ''} data-chg="setnotify">${t('remind_on')}</label><label class="f" style="margin-top:10px;max-width:240px">${t('remind_days')}<input type="number" min="0" max="14" step="1" value="${set.remindDays}" data-chg="setpref" data-k="remindDays"></label><label class="chk" style="margin-top:10px"><input type="checkbox" ${set.notifyBudget !== false ? 'checked' : ''} data-chg="setpref" data-k="notifyBudget">${t('notify_budget')}</label><label class="chk" style="margin-top:6px"><input type="checkbox" ${set.notifyUpdate !== false ? 'checked' : ''} data-chg="setpref" data-k="notifyUpdate">${t('notify_update')}</label><p class="small mute" style="margin-top:8px">${t(Host.kind === 'android' ? 'remind_note_android' : 'remind_note')}</p></section>
     <section class="card c6"><h3>${t('security')}</h3><p class="small mute">${t('security_note')}</p><div class="row" style="margin-top:10px">${set.pin ? `<button class="btn" data-act="pinset">${L.icon('lock')}${t('pin_change')}</button><button class="btn danger" data-act="pinoff">${t('pin_off')}</button>` : `<button class="btn" data-act="pinset">${L.icon('lock')}${t('pin_set')}</button>`}</div></section>
     <section class="card c12"><h3>${t('your_data')}</h3><p class="small mute">${t('data_note')}</p><div class="row" style="margin-top:10px"><button class="btn" data-act="exportjson">${L.icon('export')}${t('export_json')}</button><button class="btn" data-act="exportenc">${L.icon('lock')}${t('export_enc')}</button><button class="btn" data-act="importfile">${L.icon('down')}${t('import_backup')}</button><span class="sp"></span><button class="btn danger" data-act="wipe">${L.icon('trash')}${t('wipe')}</button></div></section>
     <section class="card c12"><h3>${t('updates')}</h3><p class="small mute">${t('version')} <b class="mono" style="letter-spacing:.05em">${esc(Host.version)}</b> · ${t('platform_' + Host.kind)}</p>${Host.canUpdate ? `<div class="row" style="margin:10px 0"><button class="btn" data-act="updcheck">${L.icon('refresh')}${t('upd_check')}</button></div><label class="chk full" style="margin-bottom:8px"><input type="checkbox" ${auto() ? 'checked' : ''} data-chg="setautoupd">${t('auto_upd')}</label><div id="upd">${updHtml()}</div>` : `<p class="mute">${t('upd_web')}</p>`}</section>

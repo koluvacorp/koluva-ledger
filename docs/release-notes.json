@@ -1,4 +1,10 @@
 {
+  "1.2.0": {
+    "es": "Nuevos avisos opcionales: presupuesto al 90 % y versión nueva disponible, además de los pagos próximos. Todos se pueden apagar en Ajustes.",
+    "en": "New optional alerts: budget at 90% and new version available, in addition to upcoming payments. All can be turned off in Settings.",
+    "pt": "Novos avisos opcionais: orçamento em 90 % e versão nova disponível, além dos pagamentos próximos. Todos podem ser desligados em Ajustes.",
+    "fr": "Nouvelles alertes facultatives : budget à 90 % et nouvelle version disponible, en plus des paiements à venir. Toutes désactivables dans les Réglages."
+  },
   "1.1.2": {
     "es": "Ahora Ledger busca actualizaciones al abrir y cada 6 horas, y te avisa cuando hay una nueva. Se puede desactivar en Ajustes → Actualizaciones.",
     "en": "Ledger now checks for updates on start and every 6 hours and notifies you when one is available. You can turn it off in Settings → Updates.",
