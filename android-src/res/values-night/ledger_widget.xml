@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lw_bg">#FF1C1C20</color>
+    <color name="lw_line">#FF39353E</color>
+    <color name="lw_ink">#FFF5F3F5</color>
+    <color name="lw_muted">#FFB9B3BF</color>
+    <color name="lw_red">#FFFF9BB0</color>
+</resources>

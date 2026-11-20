@@ -1,4 +1,10 @@
 {
+  "1.3.0": {
+    "es": "Resumen ampliado: gastado contra el mes pasado, promedio y proyección del mes, días sin gastar, gasto por día, últimos movimientos y avance de metas. Carga rápida de movimientos con Enter. Resúmenes en Movimientos, Presupuesto, Metas y Cuentas, y análisis nuevo en Reportes. Ctrl K abre un buscador de secciones y acciones. En Android hay un widget con lo que podés gastar hoy y tus próximos pagos.",
+    "en": "Expanded overview: spending vs last month, daily average and month projection, no-spend days, spending by day, recent transactions and goal progress. Quick transaction entry with Enter. Summaries in Transactions, Budget, Goals and Accounts, and new analysis in Reports. Ctrl K opens a section and action search. On Android there is a widget with what you can spend today and your upcoming payments.",
+    "pt": "Resumo ampliado: gasto contra o mês passado, média e projeção do mês, dias sem gastar, gasto por dia, últimos movimentos e progresso das metas. Cadastro rápido de movimentos com Enter. Resumos em Movimentos, Orçamento, Metas e Contas, e análise nova em Relatórios. Ctrl K abre uma busca de seções e ações. No Android há um widget com quanto você pode gastar hoje e seus próximos pagamentos.",
+    "fr": "Aperçu élargi : dépenses par rapport au mois dernier, moyenne et projection du mois, jours sans dépense, dépenses par jour, dernières opérations et avancement des objectifs. Saisie rapide des opérations avec Entrée. Résumés dans Opérations, Budget, Objectifs et Comptes, et nouvelle analyse dans Rapports. Ctrl K ouvre une recherche de sections et d’actions. Sur Android, un widget affiche ce que vous pouvez dépenser aujourd’hui et vos prochains paiements."
+  },
   "1.2.2": {
     "es": "Corrige el inicio en Android: la app quedaba en blanco o con un error al abrir. Ya arranca con normalidad. Tus datos no se tocan.",
     "en": "Fixes startup on Android: the app showed a blank screen or an error on launch. It now starts normally. Your data is untouched.",

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lw_bg">#FFFFFFFF</color>
+    <color name="lw_line">#FFE2E2E6</color>
+    <color name="lw_ink">#FF141416</color>
+    <color name="lw_muted">#FF5A5A63</color>
+    <color name="lw_red">#FFC8102E</color>
+    <string name="widget_description">Cuánto podés gastar hoy y tus próximos pagos</string>
+</resources>

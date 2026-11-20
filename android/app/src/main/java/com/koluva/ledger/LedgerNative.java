@@ -194,6 +194,11 @@ public class LedgerNative extends Plugin {
     @PluginMethod public void notifyNow(PluginCall call) {
         askPermission(); ReminderReceiver.show(getContext(), (int) (System.currentTimeMillis() % 100000), call.getString("title", "Koluva Ledger"), call.getString("body", "")); call.resolve();
     }
+    @PluginMethod public void setWidget(PluginCall call) {
+        Context ctx = getContext();
+        ctx.getSharedPreferences("ledger", Context.MODE_PRIVATE).edit().putString("w_title", call.getString("title", "Ledger")).putString("w_big", call.getString("big", "")).putString("w_sub", call.getString("sub", "")).putString("w_none", call.getString("none", "")).putString("w_rows", call.getString("rows", "[]")).apply();
+        LedgerWidget.refresh(ctx); call.resolve();
+    }
     @PluginMethod public void schedule(PluginCall call) {
         try {
             Context ctx = getContext(); AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);

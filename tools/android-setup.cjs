@@ -11,11 +11,14 @@ put(path.join(root, 'android-src/java/ReminderReceiver.java'), path.join(main, '
 put(path.join(root, 'android-src/java/MainActivity.java'), path.join(main, 'java/com/koluva/ledger/MainActivity.java'));
 put(path.join(root, 'android-src/res/xml/file_paths.xml'), path.join(main, 'res/xml/file_paths.xml'));
 put(path.join(root, 'android-src/res/drawable/ic_stat_ledger.xml'), path.join(main, 'res/drawable/ic_stat_ledger.xml'));
+put(path.join(root, 'android-src/java/LedgerWidget.java'), path.join(main, 'java/com/koluva/ledger/LedgerWidget.java'));
+for (const f of ['layout/widget_ledger.xml', 'drawable/widget_ledger_bg.xml', 'values/ledger_widget.xml', 'values-night/ledger_widget.xml', 'xml/ledger_widget_info.xml']) put(path.join(root, 'android-src/res', f), path.join(main, 'res', f));
 
 // manifiesto
 const mf = path.join(main, 'AndroidManifest.xml'); let m = fs.readFileSync(mf, 'utf8');
 m = m.replace('android:allowBackup="true"', 'android:allowBackup="false"');
 if (!m.includes('ReminderReceiver')) m = m.replace('</application>', '    <receiver android:name=".ReminderReceiver" android:exported="false" />\n    </application>');
+if (!m.includes('LedgerWidget')) m = m.replace('</application>', '    <receiver android:name=".LedgerWidget" android:exported="true" android:label="Koluva Ledger">\n        <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>\n        <meta-data android:name="android.appwidget.provider" android:resource="@xml/ledger_widget_info" />\n    </receiver>\n    </application>');
 for (const p of ['REQUEST_INSTALL_PACKAGES', 'POST_NOTIFICATIONS']) if (!m.includes(p)) m = m.replace('</manifest>', `    <uses-permission android:name="android.permission.${p}" />\n</manifest>`);
 fs.writeFileSync(mf, m);
 
