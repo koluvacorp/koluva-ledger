@@ -1,4 +1,10 @@
 {
+  "1.3.1": {
+    "es": "Diseño más claro: las etiquetas y los encabezados de tablas ya no van en mayúsculas diminutas con letras separadas; ahora son texto normal, más grande y con una barra de color.",
+    "en": "Clearer design: labels and table headers are no longer tiny spaced capitals; they are regular text, larger, with a color bar.",
+    "pt": "Design mais claro: rótulos e cabeçalhos de tabelas não usam mais maiúsculas minúsculas espaçadas; agora são texto normal, maior e com uma barra de cor.",
+    "fr": "Design plus clair : les étiquettes et en-têtes de tableaux ne sont plus de minuscules majuscules espacées ; texte normal, plus grand, avec une barre de couleur."
+  },
   "1.3.0": {
     "es": "Resumen ampliado: gastado contra el mes pasado, promedio y proyección del mes, días sin gastar, gasto por día, últimos movimientos y avance de metas. Carga rápida de movimientos con Enter. Resúmenes en Movimientos, Presupuesto, Metas y Cuentas, y análisis nuevo en Reportes. Ctrl K abre un buscador de secciones y acciones. En Android hay un widget con lo que podés gastar hoy y tus próximos pagos.",
     "en": "Expanded overview: spending vs last month, daily average and month projection, no-spend days, spending by day, recent transactions and goal progress. Quick transaction entry with Enter. Summaries in Transactions, Budget, Goals and Accounts, and new analysis in Reports. Ctrl K opens a section and action search. On Android there is a widget with what you can spend today and your upcoming payments.",
