@@ -1,0 +1,18 @@
+'use strict';
+// Genera la versión iPhone (PWA) de Ledger para koluva.com/ledger/app/. Uso: node tools/build-pwa.cjs [carpeta-del-sitio]
+const fs = require('node:fs'), path = require('node:path');
+const root = path.resolve(__dirname, '..'), www = path.join(root, 'www');
+const site = process.argv[2] || 'D:/KoluvaWork/koluvacorp/public', out = path.join(site, 'ledger/app'), v = require('../package.json').version;
+fs.rmSync(out, { recursive: true, force: true }); fs.mkdirSync(out, { recursive: true });
+const copy = (a, b) => { fs.mkdirSync(path.dirname(b), { recursive: true }); fs.copyFileSync(a, b); };
+const walk = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
+for (const f of walk(www)) { const rel = path.relative(www, f).split(path.sep).join('/'); if (rel === 'index.html' || /update-public\.json$/.test(rel) && false) continue; copy(f, path.join(out, rel)); }
+let html = fs.readFileSync(path.join(www, 'index.html'), 'utf8');
+html = html.replace('<meta name="color-scheme"', '<meta name="theme-color" content="#141416"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ledger"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="color-scheme"');
+html = html.replace('</body>', '<script src="pwa.js"></script>\n</body>');
+fs.writeFileSync(path.join(out, 'index.html'), html);
+fs.writeFileSync(path.join(out, 'pwa.js'), "if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});\n");
+fs.writeFileSync(path.join(out, 'manifest.webmanifest'), JSON.stringify({ id: '/ledger/app/', name: 'Koluva Ledger', short_name: 'Ledger', description: 'Autogestión financiera local. Funciona sin conexión.', lang: 'es', start_url: '/ledger/app/', scope: '/ledger/app/', display: 'standalone', background_color: '#141416', theme_color: '#141416', icons: [{ src: '/ledger/app/assets/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' }, { src: '/ledger/app/assets/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' }] }, null, 2));
+const files = walk(out).map(f => '/ledger/app/' + path.relative(out, f).split(path.sep).join('/')).filter(f => !/sw\.js$/.test(f)); files.unshift('/ledger/app/');
+fs.writeFileSync(path.join(out, 'sw.js'), `// Koluva Ledger (iPhone): caché para abrir sin conexión. Los datos del usuario viven en localStorage.\nconst CACHE = 'koluva-ledger-pwa-${v}';\nconst SHELL = ${JSON.stringify(files)};\nself.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())));\nself.addEventListener('activate', e => e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x.startsWith('koluva-ledger-pwa-') && x !== CACHE).map(x => caches.delete(x)))).then(() => self.clients.claim())));\nself.addEventListener('fetch', e => { const r = e.request, u = new URL(r.url); if (r.method !== 'GET' || u.origin !== location.origin || !u.pathname.startsWith('/ledger/app/')) return; e.respondWith(caches.match(r, { ignoreSearch: true }).then(hit => hit || fetch(r).then(res => { if (res.ok) { const c = res.clone(); caches.open(CACHE).then(ch => ch.put(r, c)); } return res; }).catch(() => caches.match('/ledger/app/')))); });\n`);
+console.log('PWA Ledger lista:', out, files.length, 'archivos');
