@@ -1,4 +1,10 @@
 {
+  "1.3.4": {
+    "es": "El PIN conserva el teclado y el foco mientras ingresás, informa los errores, aplica una espera visible tras cinco intentos y confirma el acceso con una transición suave. Ledger también muestra correctamente su versión y ahora bloquea instaladores con versiones internas desactualizadas.",
+    "en": "The PIN keeps its keypad and focus while you type, reports errors, applies a visible wait after five attempts, and confirms access with a smooth transition. Ledger also reports its version correctly and blocks installers with outdated internal versions.",
+    "pt": "O PIN mantém o teclado e o foco enquanto você digita, informa erros, aplica uma espera visível após cinco tentativas e confirma o acesso com uma transição suave. O Ledger também exibe a versão corretamente e bloqueia instaladores com versões internas desatualizadas.",
+    "fr": "Le PIN conserve le clavier et le focus pendant la saisie, signale les erreurs, impose une attente visible après cinq essais et confirme l’accès par une transition fluide. Ledger affiche aussi correctement sa version et bloque les installateurs dont la version interne est obsolète."
+  },
   "1.3.3": {
     "es": "PIN más claro y protegido: muestra cuando el código es incorrecto, limita intentos con una espera visible y confirma el desbloqueo con una transición suave. Se corrigió la versión interna del instalador y se agregó una verificación para evitar paquetes mal rotulados.",
     "en": "Clearer, safer PIN: it shows when a code is wrong, limits attempts with a visible wait, and confirms unlocking with a smooth transition. The installer’s internal version was corrected, with a check to prevent mislabeled packages.",
