@@ -74,27 +74,49 @@
       actions: [{ label: t('cancel'), fn: () => 'no' }, { label: t('save'), kind: 'pri', fn: async root => { const d = L.data(root); if (!/^\d{4,8}$/.test(d.a)) throw Error('pin_fmt'); if (d.a !== d.b) throw Error('pin_match'); st().settings.pin = await C.hashPin(d.a); L.changed(); L.toast(t('pin_on')); } }] });
   };
   L.acts.pinoff = async () => { if (!(await L.confirm(t('pin_off_confirm')))) return; st().settings.pin = null; L.changed(); };
-  let fails = 0, until = 0;
+  let fails = 0, until = 0, lockTimer = null, pinBusy = false;
   L.lock = () => {
     if (!st().settings.pin || document.getElementById('lock')) return;
-    const layer = document.getElementById('layer'); let v = '';
+    const layer = document.getElementById('layer'); let v = '', message = '', messageKind = '';
     const el = document.createElement('div'); el.className = 'lock'; el.id = 'lock'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', t('locked'));
-    const draw = (msg) => { el.innerHTML = `<img class="lg" src="assets/koluva-ledger-imagotipo-${document.documentElement.dataset.theme === 'dark' ? 'white' : 'ink'}.svg" alt="Koluva Ledger"><div class="eyebrow">${t('enter_pin')}</div><div class="pins" aria-hidden="true">${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<i class="${i < v.length ? 'on' : ''}" ${i >= 4 && v.length < 5 ? 'style="display:none"' : ''}></i>`).join('')}</div><div class="small" role="status" style="min-height:20px">${esc(msg || '')}</div><div class="pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button data-k="${n}">${n}</button>`).join('')}<button data-k="del" aria-label="${t('delete')}">⌫</button><button data-k="0">0</button><button data-k="ok" aria-label="${t('ok')}">✓</button></div>`; };
+    const draw = () => { el.innerHTML = `<img class="lg" src="assets/koluva-ledger-imagotipo-${document.documentElement.dataset.theme === 'dark' ? 'white' : 'ink'}.svg" alt="Koluva Ledger"><div class="eyebrow">${t('enter_pin')}</div><div class="pins ${messageKind === 'bad' ? 'pin-shake' : ''}" aria-hidden="true">${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<i class="${i < v.length ? 'on' : ''}" ${i >= 4 && v.length < 5 ? 'style="display:none"' : ''}></i>`).join('')}</div><div class="small pin-status ${messageKind}" role="status" aria-live="polite" aria-atomic="true">${esc(message)}</div><div class="pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button data-k="${n}" ${pinBusy || Date.now() < until ? 'disabled' : ''}>${n}</button>`).join('')}<button data-k="del" aria-label="${t('delete')}" ${pinBusy || Date.now() < until ? 'disabled' : ''}>⌫</button><button data-k="0" ${pinBusy || Date.now() < until ? 'disabled' : ''}>0</button><button data-k="ok" aria-label="${t('ok')}" ${pinBusy || Date.now() < until ? 'disabled' : ''}>✓</button></div>`; };
+    const setMessage = (text, kind = '') => { message = text; messageKind = kind; draw(); };
     const tryPin = async () => {
-      if (Date.now() < until) return draw(t('pin_wait', { s: Math.ceil((until - Date.now()) / 1000) }));
-      const h = await C.hashPin(v, st().settings.pin.salt);
-      if (h.hash === st().settings.pin.hash) { fails = 0; el.remove(); return; }
-      v = ''; fails++; if (fails >= 5) { until = Date.now() + Math.min(300, 30 * (fails - 4)) * 1000; draw(t('pin_wait', { s: Math.min(300, 30 * (fails - 4)) })); } else draw(t('pin_bad'));
+      if (pinBusy) return;
+      if (Date.now() < until) { setMessage(t('pin_wait', { s: Math.ceil((until - Date.now()) / 1000) }), 'error'); return; }
+      if (v.length < 4) { setMessage(t('pin_short'), 'error'); return; }
+      pinBusy = true; const candidate = v; draw();
+      try {
+        const h = await C.hashPin(candidate, st().settings.pin.salt);
+        if (h.hash === st().settings.pin.hash) {
+          fails = 0; clearInterval(lockTimer); lockTimer = null;
+          setMessage(t('pin_success'), 'success'); el.classList.add('pin-unlock');
+          if (L.motionOn() && !matchMedia('(prefers-reduced-motion: reduce)').matches) await new Promise(resolve => setTimeout(resolve, 520));
+          el.remove(); return;
+        }
+        v = ''; fails++;
+        if (fails >= 5) {
+          const seconds = Math.min(300, 30 * (fails - 4)); until = Date.now() + seconds * 1000;
+          setMessage(t('pin_wait', { s: seconds }), 'error');
+          clearInterval(lockTimer); lockTimer = setInterval(() => {
+            const remaining = Math.max(0, Math.ceil((until - Date.now()) / 1000));
+            if (!remaining) { clearInterval(lockTimer); lockTimer = null; until = 0; setMessage(t('pin_bad'), 'bad'); return; }
+            setMessage(t('pin_wait', { s: remaining }), 'error');
+          }, 1000);
+        } else setMessage(t('pin_bad'), 'bad');
+      } catch { v = ''; setMessage(t('pin_error'), 'error'); }
+      finally { pinBusy = false; if (document.getElementById('lock')) draw(); }
     };
-    el.addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b) return; const k = b.dataset.k; if (k === 'del') v = v.slice(0, -1); else if (k === 'ok') return tryPin(); else if (v.length < 8) v += k; draw(); });
-    el.addEventListener('keydown', e => { if (/^\d$/.test(e.key) && v.length < 8) { v += e.key; draw(); } else if (e.key === 'Backspace') { v = v.slice(0, -1); draw(); } else if (e.key === 'Enter') tryPin(); });
+    el.addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b || pinBusy || Date.now() < until) return; const k = b.dataset.k; if (k === 'del') v = v.slice(0, -1); else if (k === 'ok') return tryPin(); else if (v.length < 8) v += k; message = ''; messageKind = ''; draw(); });
+    el.addEventListener('keydown', e => { if (pinBusy || Date.now() < until) return; if (/^\d$/.test(e.key) && v.length < 8) { v += e.key; message = ''; messageKind = ''; draw(); } else if (e.key === 'Backspace') { v = v.slice(0, -1); draw(); } else if (e.key === 'Enter') tryPin(); });
     el.tabIndex = -1; draw(); layer.append(el); el.focus();
+    lockTimer = setInterval(() => { if (document.getElementById('lock') && until > Date.now()) setMessage(t('pin_wait', { s: Math.ceil((until - Date.now()) / 1000) }), 'error'); }, 1000);
   };
   let hiddenAt = 0;
   document.addEventListener('visibilitychange', () => { if (document.hidden) hiddenAt = Date.now(); else if (hiddenAt && Date.now() - hiddenAt > 60000 && S.state && S.state.settings.pin) L.lock(); });
 
   /* ---------- AJUSTES ---------- */
-  L.acts.setpref = el => { const s = st().settings; s[el.dataset.k] = el.dataset.v === undefined ? (el.type === 'checkbox' ? el.checked : el.value) : el.dataset.v; if (el.dataset.k === 'remindDays') s.remindDays = Math.max(0, Math.min(14, parseInt(el.value) || 0)); L.changed(); };
+  L.acts.setpref = el => { const s = st().settings; s[el.dataset.k] = el.dataset.v === undefined ? (el.type === 'checkbox' ? el.checked : el.value) : el.dataset.v; if (el.dataset.k === 'motion') s.motionChosen = true; if (el.dataset.k === 'remindDays') s.remindDays = Math.max(0, Math.min(14, parseInt(el.value) || 0)); L.changed(); L.applyPrefs(); };
   L.acts.setlang = el => { st().settings.lang = el.value; L.changed(); };
   L.acts.setname = el => { st().settings.name = el.value.slice(0, 60); S.touch(); };
   L.acts.setcur = el => { const v = el.value.toUpperCase(); if (/^[A-Z]{3}$/.test(v)) { st().settings.currency = v; L.changed(); } else { L.toast(t('err_cur')); el.value = st().settings.currency; } };

@@ -1,7 +1,7 @@
 {
   "name": "koluva-ledger",
   "productName": "Koluva Ledger",
-  "version": "1.3.1",
+  "version": "1.3.3",
   "description": "Autogestión financiera local para Windows y Android.",
   "author": "Koluva",
   "license": "SEE LICENSE IN LICENSE",
@@ -17,7 +17,9 @@
     "release:manifest": "node tools/create-update-manifest.cjs",
     "release:publish": "node tools/publish.cjs"
   },
-  "engines": { "node": ">=24.0.0" },
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "devDependencies": {
     "@capacitor/android": "^8.6.2",
     "@capacitor/cli": "^8.6.2",
@@ -29,8 +31,16 @@
     "appId": "com.koluva.ledger",
     "productName": "Koluva Ledger",
     "artifactName": "KoluvaLedger-${version}-Windows-${arch}-Setup.${ext}",
-    "directories": { "output": "release", "buildResources": "build" },
-    "files": ["electron/**/*", "www/**/*", "release.config.json", "package.json"],
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "electron/**/*",
+      "www/**/*",
+      "release.config.json",
+      "package.json"
+    ],
     "asar": true,
     "electronFuses": {
       "runAsNode": false,
@@ -39,12 +49,28 @@
       "enableEmbeddedAsarIntegrityValidation": true,
       "onlyLoadAppFromAsar": true
     },
-    "win": { "target": "nsis", "icon": "www/assets/app-icon.png", "executableName": "KoluvaLedger" },
+    "win": {
+      "target": "nsis",
+      "icon": "www/assets/app-icon.png",
+      "executableName": "KoluvaLedger"
+    },
     "nsis": {
-      "oneClick": false, "perMachine": false, "allowElevation": false, "packElevateHelper": false,
-      "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true, "createStartMenuShortcut": true,
-      "shortcutName": "Koluva Ledger", "deleteAppDataOnUninstall": false,
-      "installerLanguages": ["es", "en", "fr", "pt_BR"], "language": "3082"
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "packElevateHelper": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Koluva Ledger",
+      "deleteAppDataOnUninstall": false,
+      "installerLanguages": [
+        "es",
+        "en",
+        "fr",
+        "pt_BR"
+      ],
+      "language": "3082"
     }
   }
 }

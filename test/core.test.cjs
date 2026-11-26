@@ -23,6 +23,16 @@ test('saldos, transferencias y patrimonio', () => {
   assert.equal(C.totals(s).liquid, 1589.45);
 });
 
+test('movimiento: instalaciones nuevas activas y migración conserva decisiones explícitas', () => {
+  assert.equal(C.emptyState().settings.motion, 'on');
+  const imported = motion => C.sanitize({ v: 1, settings: { motion, motionChosen: motion !== 'legacy-system' }, accounts: [], cats: [], tx: [] }).settings;
+  assert.equal(imported('legacy-system').motion, 'on');
+  assert.equal(imported('off').motion, 'off');
+  assert.equal(imported('system').motion, 'system');
+  const legacy = C.sanitize({ v: 1, settings: { motion: 'system' }, accounts: [], cats: [], tx: [] }).settings;
+  assert.equal(legacy.motion, 'on');
+});
+
 test('resumen mensual y presupuesto con arrastre', () => {
   const s = base(); const food = s.cats.find(c => c.name === 'Comida'); food.budget = 100; food.rollover = true;
   s.tx.push({ id: 'x', date: '2026-10-10', amt: 40, kind: 'exp', acc: 'a1', cat: food.id, note: '', tags: [] }, { id: 'y', date: '2026-11-10', amt: 70, kind: 'exp', acc: 'a1', cat: food.id, note: '', tags: [] });

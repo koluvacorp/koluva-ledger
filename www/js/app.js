@@ -59,7 +59,21 @@
   L.applyPrefs = () => {
     const s = S.state.settings, root = document.documentElement;
     const dark = s.theme === 'dark' || (s.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+    const previousTheme = root.dataset.theme;
     root.dataset.theme = dark ? 'dark' : 'light'; root.dataset.motion = s.motion; root.lang = s.lang;
+    if (previousTheme && previousTheme !== root.dataset.theme) {
+      root.classList.remove('theme-reveal-active');
+      if (L.motionOn()) {
+        root.style.setProperty('--theme-cover', previousTheme === 'dark' ? '#141416' : '#FFFFFF');
+        root.classList.add('theme-reveal');
+        void root.offsetWidth;
+        root.classList.add('theme-reveal-active');
+        clearTimeout(L.themeRevealTimer);
+        L.themeRevealTimer = setTimeout(() => { root.classList.remove('theme-reveal', 'theme-reveal-active'); root.style.removeProperty('--theme-cover'); }, 460);
+      } else {
+        root.classList.remove('theme-reveal'); root.style.removeProperty('--theme-cover');
+      }
+    }
     document.title = 'Koluva Ledger';
     if (window.ledgerHost) { root.classList.add('is-win'); try { L.winControls(); } catch {} }
     document.querySelectorAll('.logo-l').forEach(i => { i.src = `assets/koluva-ledger-imagotipo-${dark ? 'white' : 'ink'}.svg`; });
@@ -68,6 +82,7 @@
   };
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (S.state) L.applyPrefs(); });
   L.motionOn = () => { const m = S.state.settings.motion; return m === 'on' || (m === 'system' && !matchMedia('(prefers-reduced-motion: reduce)').matches); };
+  matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change', () => { if (S.state?.settings.motion === 'system') L.applyPrefs(); });
 
   /* ---------- toasts ---------- */
   L.toast = (msg, undo, label) => {

@@ -3,6 +3,7 @@
 // Credencial: GH_TOKEN, o `gh auth token`, o Git Credential Manager. Nunca se guarda ni se imprime.
 const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict'), { execFileSync } = require('node:child_process');
 const crypto = require('node:crypto');
+const { verifyInstallerVersion, verifyPackagedVersion } = require('./verify-packaged-version.cjs');
 const root = path.resolve(__dirname, '..'), pkg = require('../package.json'), rel = require('../release.config.json'), v = pkg.version, REPO = rel.repo;
 function token() {
   if (process.env.GH_TOKEN) return process.env.GH_TOKEN;
@@ -19,6 +20,12 @@ function token() {
   const repo = await api(''); assert.ok(repo, `El repositorio ${REPO} no existe. Crealo público primero.`); assert.ok(repo.permissions && repo.permissions.push, 'Sin permiso de escritura.'); assert.equal(repo.private, false, 'El repositorio debe ser público.');
   const rd = path.join(root, 'release'), exe = `KoluvaLedger-${v}-Windows-x64-Setup.exe`, apk = `KoluvaLedger-${v}-Android.apk`, chan = path.join(rd, 'ledger-stable', 'latest.json');
   for (const f of [exe, apk, 'SHA256SUMS.txt']) assert.ok(fs.existsSync(path.join(rd, f)), `Falta release/${f}`);
+  const unpackedAsar = path.join(rd, 'win-unpacked', 'resources', 'app.asar');
+  assert.ok(fs.existsSync(unpackedAsar), 'Falta el app.asar generado para Windows; recompilá antes de publicar.');
+  assert.ok(fs.statSync(path.join(rd, exe)).mtimeMs >= fs.statSync(unpackedAsar).mtimeMs, 'El instalador Windows es anterior al ASAR compilado; reconstruí el instalador antes de publicar.');
+  verifyPackagedVersion({ archive: unpackedAsar, expected: v, asarCli: path.join(root, 'node_modules/@electron/asar/bin/asar.js') });
+  const sevenZip = await require('app-builder-lib/out/toolsets/7zip').getPath7za();
+  verifyInstallerVersion({ installer: path.join(rd, exe), expected: v, asarCli: path.join(root, 'node_modules/@electron/asar/bin/asar.js'), sevenZip });
   const man = JSON.parse(JSON.parse(fs.readFileSync(chan, 'utf8')).payload); assert.equal(man.version, v);
   const notes = man.notes.es;
   const getOrCreate = async (tag, name, body) => await api(`/releases/tags/${tag}`) || await api('/releases', 'POST', { tag_name: tag, target_commitish: repo.default_branch, name, body, draft: true, prerelease: false });
