@@ -12,6 +12,8 @@ Versión actual: **1.3.5**. Las gráficas del Resumen, Reportes y minigráficas 
 | Android (APK) | https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.3.5/KoluvaLedger-1.3.5-Android.apk |
 | Todas las versiones | https://github.com/koluvacorp/koluva-ledger/releases |
 
+Registro de cambios: [CHANGELOG.md](CHANGELOG.md).
+
 Windows: el instalador no tiene firma Authenticode; SmartScreen puede avisar. Android: permití «instalar apps desconocidas» para tu navegador la primera vez.
 
 ## Qué trae

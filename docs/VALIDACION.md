@@ -7,10 +7,12 @@
 - Android `assembleRelease` compiló; `output-metadata.json` indica `versionCode 10305` y `versionName 1.3.5`; APK firmado y verificado con la misma huella de certificado RSA que 1.3.4.
 - El APK contiene `charts.js`, `plus.js` y `app.css` vigentes byte a byte desde `android/app/src/main/assets/public`.
 
-**Pendiente hasta la publicación**
-- Manifiesto ECDSA firmado, archivos en GitHub, comparación de tamaño/hash, enlaces HTTP 200 y retención de cinco releases.
-- Inspección visual y actualización real desde Ledger instalado; no se usó la pantalla del propietario ni se probó un dispositivo físico.
-- Windows no cuenta con firma Authenticode; SmartScreen puede mostrar un aviso.
+**Publicación verificada**
+- Release `ledger-v1.3.5` y canal `ledger-stable` publicados. El manifiesto remoto v1.3.5 tiene firma ECDSA válida con la clave pública incluida en Ledger y notas es/en/pt/fr.
+- Simulación del verificador del actualizador usando versión cliente 1.3.4: respuesta `available` con 1.3.5 y firma válida.
+- Instalador Windows: 121.523.510 bytes, SHA-256 `0d99ab6902cab522af14826046595ca3c31bbc31a12ec3d8eac6e677e386081d`; APK Android: 3.563.381 bytes, SHA-256 `1cd5cf4adfcb13b2ddb31a8dab6b5274d78ac146b25b660545e4bc324ad5815e`.
+- Descargas y canal responden HTTP 200 con tamaños correctos. La retención deja exactamente 1.3.5, 1.3.4, 1.3.3, 1.3.2 y 1.3.1; los tags de versiones antiguas se preservaron.
+- No se usó la pantalla del propietario ni se hizo prueba visual/manual de actualización o instalación en dispositivo físico. Windows no tiene firma Authenticode; SmartScreen puede mostrar un aviso.
 
 # Validación de Koluva Ledger 1.0.0 (18-11-2026)
 
