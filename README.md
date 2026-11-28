@@ -2,12 +2,14 @@
 
 Autogestión financiera local para **Windows** y **Android**. Sin cuenta, sin nube, sin anuncios. Marca Koluva (hexágono-escalera); isotipo propio de Ledger: tres pilares isométricos a 30° que suben como peldaños.
 
+Versión actual: **1.3.5**. Las gráficas del Resumen, Reportes y minigráficas ahora aparecen con movimiento suave; la opción de desactivar animaciones sigue funcionando.
+
 ## Descarga directa
 
 | Plataforma | Enlace |
 |---|---|
-| Windows x64 | https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.2.2/KoluvaLedger-1.2.2-Windows-x64-Setup.exe |
-| Android (APK) | https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.2.2/KoluvaLedger-1.2.2-Android.apk |
+| Windows x64 | https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.3.5/KoluvaLedger-1.3.5-Windows-x64-Setup.exe |
+| Android (APK) | https://github.com/koluvacorp/koluva-ledger/releases/download/ledger-v1.3.5/KoluvaLedger-1.3.5-Android.apk |
 | Todas las versiones | https://github.com/koluvacorp/koluva-ledger/releases |
 
 Windows: el instalador no tiene firma Authenticode; SmartScreen puede avisar. Android: permití «instalar apps desconocidas» para tu navegador la primera vez.

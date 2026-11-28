@@ -20,8 +20,8 @@
     const n = C.daysIn(ym), per = Array(n).fill(0), today = C.today();
     for (const x of exps(s, ym + '-01', ym + '-' + String(n).padStart(2, '0'))) per[dayNum(x.date) - 1] += base(s, x);
     const max = Math.max(1, ...per), W = 620, H = 150, bw = W / n;
-    const cols = per.map((v, i) => { const h = v / max * (H - 30), d = `${ym}-${String(i + 1).padStart(2, '0')}`; return `<rect x="${(i * bw + 1.5).toFixed(1)}" y="${(H - 18 - h).toFixed(1)}" width="${(bw - 3).toFixed(1)}" height="${Math.max(v ? 2 : 0, h).toFixed(1)}" rx="3" class="${d === today ? 'pl-now' : ''}"><title>${esc(L.date(d))}: ${L.money(v)}</title></rect>${(i + 1) % 5 === 0 || i === 0 ? `<text x="${(i * bw + bw / 2).toFixed(1)}" y="${H - 4}" text-anchor="middle">${i + 1}</text>` : ''}`; }).join('');
-    return `<svg class="chart pl-bars" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('daily_chart'))}">${cols}</svg>`;
+    const cols = per.map((v, i) => { const h = v / max * (H - 30), d = `${ym}-${String(i + 1).padStart(2, '0')}`; return `<rect x="${(i * bw + 1.5).toFixed(1)}" y="${(H - 18 - h).toFixed(1)}" width="${(bw - 3).toFixed(1)}" height="${Math.max(v ? 2 : 0, h).toFixed(1)}" rx="3" class="chart-bar ${d === today ? 'pl-now' : ''}" style="animation-delay:${Math.min(i, 8) * 24}ms"><title>${esc(L.date(d))}: ${L.money(v)}</title></rect>${(i + 1) % 5 === 0 || i === 0 ? `<text x="${(i * bw + bw / 2).toFixed(1)}" y="${H - 4}" text-anchor="middle">${i + 1}</text>` : ''}`; }).join('');
+    return `<svg class="chart chart-motion pl-bars" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('daily_chart'))}">${cols}</svg>`;
   }
 
   /* ---------- RESUMEN ---------- */

@@ -1,4 +1,10 @@
 {
+  "1.3.5": {
+    "es": "Los gráficos de dona, barras y líneas ahora aparecen con movimientos suaves y breves. Respetan la opción de desactivar animaciones y los textos de los gráficos se protegen al mostrarse.",
+    "en": "Donut, bar, and line charts now appear with brief, smooth motion. They respect the motion-off setting, and chart labels are safely escaped before display.",
+    "pt": "Gráficos de rosca, barras e linhas agora aparecem com movimentos suaves e breves. Respeitam a opção de desativar animações, e os rótulos são protegidos antes da exibição.",
+    "fr": "Les graphiques en anneau, en barres et en courbes apparaissent désormais avec un mouvement bref et fluide. Ils respectent le réglage de désactivation des animations et les libellés sont échappés avant affichage."
+  },
   "1.3.4": {
     "es": "El PIN conserva el teclado y el foco mientras ingresás, informa los errores, aplica una espera visible tras cinco intentos y confirma el acceso con una transición suave. Ledger también muestra correctamente su versión y ahora bloquea instaladores con versiones internas desactualizadas.",
     "en": "The PIN keeps its keypad and focus while you type, reports errors, applies a visible wait after five attempts, and confirms access with a smooth transition. Ledger also reports its version correctly and blocks installers with outdated internal versions.",
